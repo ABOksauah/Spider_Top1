@@ -1,3 +1,4 @@
+
 name: Build Spider APK
 
 on:
@@ -13,13 +14,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Accept Android SDK Licenses
         run: yes | sdkmanager --licenses
@@ -33,7 +34,7 @@ jobs:
         run: |
           PROJECT_DIR=$(find source -type f \( -name settings.gradle -o -name settings.gradle.kts \) -printf '%h\n' | head -n 1)
           if [ -z "$PROJECT_DIR" ]; then
-            echo "ERROR: لم يتم العثور على مشروع Gradle داخل ZIP"
+            echo "ERROR: No Gradle project found inside ZIP"
             exit 1
           fi
           cd "$PROJECT_DIR"
