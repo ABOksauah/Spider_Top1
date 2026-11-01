@@ -1,0 +1,48 @@
+name: Build Spider APK
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Source
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Extract Source
+        run: |
+          unzip -o Spider_Top1_REPAIRED.zip -d source
+          find source -type f -name gradlew -exec chmod +x {} \;
+
+      - name: Build APK
+        run: |
+          PROJECT_DIR=$(find source -type f \( -name settings.gradle -o -name settings.gradle.kts \) -printf '%h\n' | head -n 1)
+          if [ -z "$PROJECT_DIR" ]; then
+            echo "ERROR: لم يتم العثور على مشروع Gradle داخل ZIP"
+            exit 1
+          fi
+          cd "$PROJECT_DIR"
+          if [ -f gradlew ]; then
+            ./gradlew assembleDebug
+          else
+            gradle assembleDebug
+          fi
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Spider-Top1-APK
+          path: source/**/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
