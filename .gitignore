@@ -1,0 +1,29 @@
+# Local machine configuration
+local.properties
+*.local
+
+# Signing credentials and private keys
+signing.properties
+*.jks
+*.keystore
+*.p12
+*.pfx
+
+# Gradle cache and build output
+.gradle/
+**/build/
+
+# IDE and editor metadata
+.idea/
+*.iml
+.androidide/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Temporary editor and backup files
+*.tmp
+*.swp
+*~
+*.bak
